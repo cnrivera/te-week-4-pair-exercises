@@ -17,7 +17,7 @@ namespace file_io_part1_exercises_pair
             if (filePath.Length > 0)
             {
                 fileContents = ReadFile(filePath);
-                fileContents = RemoveDoubleSpaces(fileContents);
+                fileContents = RemoveDoubleSpaces(fileContents).Trim();
                 wordCount = CountWords(fileContents);
                 sentenceCount = CountSentences(fileContents);
                 DisplayCounts(wordCount, sentenceCount);
