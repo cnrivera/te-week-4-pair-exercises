@@ -25,8 +25,6 @@ namespace file_io_part1_exercises_pair
 
         }
 
-
-
         public static string GetFilePath()
         {
             string filePath = "";
@@ -77,7 +75,7 @@ namespace file_io_part1_exercises_pair
 
                     while (!sr.EndOfStream)
                     {
-                        fileContents += "\n" + sr.ReadLine();
+                        fileContents += " " + sr.ReadLine();
                     }
                 }
             }
