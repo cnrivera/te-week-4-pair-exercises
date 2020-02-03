@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace file_io_part1_exercises_pair
 {
@@ -110,8 +111,11 @@ namespace file_io_part1_exercises_pair
 
         public static int CountSentences(string fileContents)
         {
-            char[] punctuation = { '!', '.', '?' };
-            string[] sentences = fileContents.Split(punctuation);
+            string[] punctuation = { "! ", ". ", "? " };
+            string[] sentences = fileContents.Split(punctuation, int.MaxValue, StringSplitOptions.RemoveEmptyEntries);
+
+            
+
             return sentences.Length;
         }
 
