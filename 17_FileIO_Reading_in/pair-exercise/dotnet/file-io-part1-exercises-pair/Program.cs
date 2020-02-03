@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace file_io_part1_exercises_pair
 {
@@ -56,7 +55,7 @@ namespace file_io_part1_exercises_pair
 
         public static bool ValidateFilePath(string filePath)
         {
-            bool isValid = File.Exists(filePath);             
+            bool isValid = File.Exists(filePath);
             return isValid;
         }
 
@@ -80,7 +79,7 @@ namespace file_io_part1_exercises_pair
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error reading the file");
                 Console.WriteLine(ex.Message);
@@ -94,7 +93,7 @@ namespace file_io_part1_exercises_pair
             const string doubleSpace = "  ";
             const string singleSpace = " ";
 
-            while(text.Contains(doubleSpace))
+            while (text.Contains(doubleSpace))
             {
                 text = text.Replace(doubleSpace, singleSpace);
             }
@@ -103,7 +102,7 @@ namespace file_io_part1_exercises_pair
         }
 
         public static int CountWords(string fileContents)
-        {            
+        {
             string[] words = fileContents.Split(" ");
 
             return words.Length;
@@ -113,8 +112,6 @@ namespace file_io_part1_exercises_pair
         {
             string[] punctuation = { "! ", ". ", "? " };
             string[] sentences = fileContents.Split(punctuation, int.MaxValue, StringSplitOptions.RemoveEmptyEntries);
-
-            
 
             return sentences.Length;
         }
