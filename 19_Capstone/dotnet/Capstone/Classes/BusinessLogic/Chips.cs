@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Capstone.Classes.BusinessLogic
 {
-    public class Gum : Item
+    public class Chips : Item
     {
         public override string Message
         {
             get
             {
-                return "Chew Chew, Yum!";
+                return "Crunch Crunch, Yum!";
             }
         }
 
-        public Gum(string name, decimal price)
+        public Chips(string name, decimal price)
         {
             Name = name;
             Price = price;

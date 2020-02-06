@@ -4,7 +4,16 @@ using System.Text;
 
 namespace Capstone.Classes.BusinessLogic
 {
-    class Item
+    public abstract class Item
     {
+        public string Name { get; protected set; }
+        public decimal Price { get; protected set; }
+        public int AvailableCount { get; protected set; }
+        public virtual string Message { get; }
+
+        public void Purchase()
+        {
+            AvailableCount--;
+        }
     }
 }
