@@ -8,6 +8,7 @@ namespace Capstone.Classes.IO
     public class OwnerMenu : IMenu
     {
         private bool isRunning;
+        public bool returnToCustomerMenu { get; private set; }
         public bool IsRunning
         {
             get
@@ -19,6 +20,7 @@ namespace Capstone.Classes.IO
         public OwnerMenu(VendingMachine theVendingMachine)
         {
             isRunning = true;
+            returnToCustomerMenu = false;
             vendingMachine = theVendingMachine;
         }
         public void ExitMenu()
@@ -28,7 +30,7 @@ namespace Capstone.Classes.IO
 
         public void PickOption()
         {
-            string response = Console.ReadLine();
+            string response = Console.ReadLine().Trim().ToUpper();
             if(response == "1")
             {
                 ShowAudit();
@@ -39,6 +41,11 @@ namespace Capstone.Classes.IO
             }
             else if(response == "3")
             {
+                returnToCustomerMenu = true;
+                ExitMenu();
+            }
+            else if (response == "4")
+            {
                 ExitMenu();
             }
         }
@@ -46,7 +53,7 @@ namespace Capstone.Classes.IO
         public void ShowOptions()
         {
             Console.Clear();
-            Console.WriteLine("1) View audit\n2) View sales report\n3) Exit");
+            Console.WriteLine("1) View audit\n2) View sales report\n3) Return to customer menu\n4) Exit");
         }
 
         public void ShowAudit()
@@ -70,7 +77,7 @@ namespace Capstone.Classes.IO
             {
                 Console.WriteLine($"{itemName} | {itemsSold[itemName]}");
             }
-            Console.WriteLine($"**TOTAL SALES** {totalSales.ToString("C")}");
+            Console.WriteLine($"\n**TOTAL SALES** {totalSales.ToString("C")}");
             Console.WriteLine("Press any button to continue");
             Console.ReadKey();
         }

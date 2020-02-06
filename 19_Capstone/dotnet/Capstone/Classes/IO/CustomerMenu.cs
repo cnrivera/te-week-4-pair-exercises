@@ -31,7 +31,7 @@ namespace Capstone.Classes.IO
 
         public void PickOption()
         {
-            string response = Console.ReadLine();
+            string response = Console.ReadLine().Trim().ToUpper();
             if(response == "1")
             {
                 Console.Clear();
@@ -65,7 +65,9 @@ namespace Capstone.Classes.IO
         }
         public void DisplayBalance()
         {
+            Console.WriteLine("-----------------------");
             Console.WriteLine("Current Balance: " + vendingMachine.CustomerBalance.ToString("C"));
+            Console.WriteLine("-----------------------\n");
         }
         public void ShowItems()
         {
@@ -83,7 +85,7 @@ namespace Capstone.Classes.IO
                     }
 
                     Console.WriteLine("\nEnter the item number you would like to purchase, or 1 to return to the main menu");
-                    response = Console.ReadLine();
+                    response = Console.ReadLine().Trim().ToUpper();
                     if (vendingMachine.Slots.Contains(response))
                     {
                         if (vendingMachine.IsInStock(response))
@@ -122,11 +124,17 @@ namespace Capstone.Classes.IO
         {
             decimal funds = 0;
             string response;
-            while(funds == 0)
+            while(funds <= 0)
             {
+                Console.Clear();
+                DisplayBalance();
                 Console.WriteLine("How much would you like to deposit?");
                 Console.WriteLine("1) $1.00\n2) $5.00\n3) $10.00");
-                response = Console.ReadLine();
+                if(funds == -1)
+                {
+                    Console.WriteLine("Please enter a valid option (1, 2 or 3)");
+                }
+                response = Console.ReadLine().Trim().ToUpper();
 
                 if(response == "1")
                 {
@@ -141,8 +149,8 @@ namespace Capstone.Classes.IO
                     funds = 10.00M;
                 }
                 else
-                {
-                    Console.WriteLine("Please enter a valid option (1, 2 or 3)");
+                {                                        
+                    funds = -1;
                 }
 
             }

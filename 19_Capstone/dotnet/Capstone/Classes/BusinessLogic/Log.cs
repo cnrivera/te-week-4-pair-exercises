@@ -21,7 +21,8 @@ namespace Capstone.Classes.BusinessLogic
 
         public override string ToString()
         {
-            return $"{TransactionDate.ToString("MM/dd/yyyy hh:mm:ss tt")} {Action} {ChangeInBalance.ToString("C")} {CurrentBalance.ToString("C")}";
+            return String.Format("{0,-10}{1,20}{2,25}{3,30}", TransactionDate.ToString("MM/dd/yyyy hh:mm:ss tt"), Action, ChangeInBalance.ToString("C"), CurrentBalance.ToString("C"));
+            //return $"{TransactionDate.ToString("MM/dd/yyyy hh:mm:ss tt")} {Action} {ChangeInBalance.ToString("C")} {CurrentBalance.ToString("C")}";
         }
     }
 }

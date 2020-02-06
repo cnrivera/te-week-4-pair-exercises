@@ -54,10 +54,10 @@ namespace Capstone.Classes.BusinessLogic
             List<string> items = new List<string>();
             foreach (string slot in Inventory.Keys)
             {
-                string itemInfo = $"{slot}: {Inventory[slot].Name} {Inventory[slot].Price.ToString("C")} ";
+                string itemInfo = String.Format("{0,-25}{1,20:C}",slot + ": " + Inventory[slot].Name,  Inventory[slot].Price);
                 if (Inventory[slot].AvailableCount == 0)
                 {
-                    itemInfo += "SOLD OUT";
+                    itemInfo += " SOLD OUT";
                 }
                 items.Add(itemInfo);
 

@@ -16,19 +16,7 @@ namespace Capstone
             lines = FileIO.ReadVendingMachineFile();
             vendingMachine = FileIO.CreateVendingMachine(lines);
             IMenu menu = PickMenu(vendingMachine);
-
-
-            RunMenu(menu);
-            if(menu is CustomerMenu)
-            {
-                CustomerMenu customerMenu = (CustomerMenu)menu;
-                if (customerMenu.goToOwnerMenu)
-                {
-                    menu = new OwnerMenu(vendingMachine);
-                    RunMenu(menu);
-                }
-            }
-            
+            RunMenu(menu,vendingMachine);            
         }
         static IMenu PickMenu(VendingMachine vendingMachine)
         {
@@ -48,12 +36,29 @@ namespace Capstone
             }
             return menu;
         }
-        static void RunMenu(IMenu menu)
+        static void RunMenu(IMenu menu, VendingMachine vendingMachine)
         {
             while (menu.IsRunning)
             {
                 menu.ShowOptions();
                 menu.PickOption();
+
+                if (menu is CustomerMenu)
+                {
+                    CustomerMenu customerMenu = (CustomerMenu)menu;
+                    if (customerMenu.goToOwnerMenu)
+                    {
+                        menu = new OwnerMenu(vendingMachine);
+                    }
+                }
+                else
+                {
+                    OwnerMenu ownerMenu = (OwnerMenu)menu;
+                    if (ownerMenu.returnToCustomerMenu)
+                    {
+                        menu = new CustomerMenu(vendingMachine);
+                    }
+                }
             }
         }
 
