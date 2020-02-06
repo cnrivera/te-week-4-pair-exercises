@@ -8,6 +8,7 @@ namespace Capstone.Classes.IO
     public class CustomerMenu : IMenu
     {
         private bool isRunning;
+        public bool goToOwnerMenu { get; private set; }
         public bool IsRunning
         {
             get
@@ -19,6 +20,7 @@ namespace Capstone.Classes.IO
         public CustomerMenu(VendingMachine theVendingMachine)
         {
             isRunning = true;
+            goToOwnerMenu = false;
             vendingMachine = theVendingMachine;
         }
 
@@ -42,7 +44,16 @@ namespace Capstone.Classes.IO
             }
             else if(response == "3")
             {
-                
+                EndTransaction();
+            }
+            else if(response == "4")
+            {
+                ExitMenu();
+            }
+            else if(response == "1234")
+            {
+                goToOwnerMenu = true;
+                ExitMenu();
             }
         }
 
@@ -75,9 +86,18 @@ namespace Capstone.Classes.IO
                     response = Console.ReadLine();
                     if (vendingMachine.Slots.Contains(response))
                     {
-                        if (PurchaseItem(response))
+                        if (vendingMachine.IsInStock(response))
                         {
-                            response = "1";
+                            if (PurchaseItem(response))
+                            {
+                                response = "1";
+                            }
+                            items = new List<string>(vendingMachine.GetInventory());
+                        }
+                        else
+                        {
+                            Console.WriteLine("Sorry, this item is out of stock. Press any button to continue");
+                            Console.ReadKey();
                         }
                     }
                 }
@@ -151,6 +171,14 @@ namespace Capstone.Classes.IO
             }
             Console.Clear();
             return returnToMainMenu;
+        }
+
+        public void EndTransaction()
+        {
+            Dictionary<string, int> cointCount = vendingMachine.GiveChange();
+            Console.WriteLine($"Your change is {cointCount["Quarters"]} quarters, {cointCount["Dimes"]} dimes and {cointCount["Nickles"]} nickles");
+            Console.WriteLine("Press any button to continue");
+            Console.ReadKey();
         }
     }
 }

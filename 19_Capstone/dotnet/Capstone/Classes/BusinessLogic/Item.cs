@@ -9,11 +9,13 @@ namespace Capstone.Classes.BusinessLogic
         public string Name { get; protected set; }
         public decimal Price { get; protected set; }
         public int AvailableCount { get; protected set; }
+        public int NumberSold { get; protected set; }
         public virtual string Message { get; }
 
         public void Purchase()
         {
             AvailableCount--;
+            NumberSold++;
         }
     }
 }

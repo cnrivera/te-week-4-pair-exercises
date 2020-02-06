@@ -10,6 +10,7 @@ namespace Capstone.Classes.BusinessLogic
         /// <string, List<item>> -> <slot, item>
         /// </summary>
         private Dictionary<string, Item> Inventory = new Dictionary<string, Item>();
+        public List<Log> auditLog = new List<Log>();
         public decimal CustomerBalance { get; private set; }
         public decimal VendingMachineBalance { get; private set; }
         public string[] Slots
@@ -23,6 +24,19 @@ namespace Capstone.Classes.BusinessLogic
                 }
                 return keys.ToArray();
 
+            }
+        }
+
+        public Dictionary<string, int> ItemsSold
+        {
+            get
+            {
+                Dictionary<string, int> itemsSold = new Dictionary<string, int>();
+                foreach(Item item in Inventory.Values)
+                {
+                    itemsSold[item.Name] = item.NumberSold;
+                }
+                return itemsSold;
             }
         }
         public VendingMachine()
@@ -53,23 +67,58 @@ namespace Capstone.Classes.BusinessLogic
         }
 
         public void AddFunds(decimal funds)
-        {
+        {            
             CustomerBalance += funds;
+            auditLog.Add(new Log("FEED MONEY", CustomerBalance, funds));
         }
 
         public decimal GetItemPrice(string slot)
         {
             return Inventory[slot].Price;
         }
-
+        public bool IsInStock(string slot)
+        {
+            return Inventory[slot].AvailableCount > 0;
+        }
         public string BuyItem(string slot)
         {
             Item item = Inventory[slot];
+            
 
             CustomerBalance -= item.Price;
+            VendingMachineBalance += item.Price;
             item.Purchase();
-
+            auditLog.Add(new Log(Inventory[slot].Name, CustomerBalance, Inventory[slot].Price));
             return item.Message;
+        }
+
+        public Dictionary<string,int> GiveChange()
+        {
+            Dictionary<string, int> coinCounts = new Dictionary<string, int>();
+            coinCounts["Quarters"] = 0;
+            coinCounts["Dimes"] = 0;
+            coinCounts["Nickles"] = 0;
+            decimal change = CustomerBalance;
+            while(CustomerBalance > 0)
+            {
+                if(CustomerBalance >= .25M)
+                {
+                    CustomerBalance -= .25M;
+                    coinCounts["Quarters"]++;
+                }
+                else if(CustomerBalance >= .10M)
+                {
+                    CustomerBalance -= .10M;
+                    coinCounts["Dimes"]++;
+                }
+                else
+                {
+                    CustomerBalance -= .05M;
+                    coinCounts["Nickles"]++;
+                }                
+            }
+            auditLog.Add(new Log("GIVE CHANGE", CustomerBalance, change));
+            return coinCounts;
         }
     }
 }
