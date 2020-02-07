@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using System.Threading;
 
 namespace Capstone.Classes.BusinessLogic
 {
     public class VendingMachine
     {
         /// <summary>
-        /// <string, List<item>> -> <slot, item>
+        /// <string, item> -> <slot, item>
         /// </summary>
         private Dictionary<string, Item> Inventory = new Dictionary<string, Item>();
         public List<Log> auditLog = new List<Log>();
@@ -18,7 +20,7 @@ namespace Capstone.Classes.BusinessLogic
             get
             {
                 List<string> keys = new List<string>();
-                foreach(string key in Inventory.Keys)
+                foreach (string key in Inventory.Keys)
                 {
                     keys.Add(key);
                 }
@@ -32,7 +34,7 @@ namespace Capstone.Classes.BusinessLogic
             get
             {
                 Dictionary<string, int> itemsSold = new Dictionary<string, int>();
-                foreach(Item item in Inventory.Values)
+                foreach (Item item in Inventory.Values)
                 {
                     itemsSold[item.Name] = item.NumberSold;
                 }
@@ -54,7 +56,7 @@ namespace Capstone.Classes.BusinessLogic
             List<string> items = new List<string>();
             foreach (string slot in Inventory.Keys)
             {
-                string itemInfo = String.Format("{0,-25}{1,20:C}",slot + ": " + Inventory[slot].Name,  Inventory[slot].Price);
+                string itemInfo = String.Format("{0,-25}{1,20:C}", slot + ": " + Inventory[slot].Name, Inventory[slot].Price);
                 if (Inventory[slot].AvailableCount == 0)
                 {
                     itemInfo += " SOLD OUT";
@@ -67,7 +69,7 @@ namespace Capstone.Classes.BusinessLogic
         }
 
         public void AddFunds(decimal funds)
-        {            
+        {
             CustomerBalance += funds;
             auditLog.Add(new Log("FEED MONEY", CustomerBalance, funds));
         }
@@ -83,7 +85,7 @@ namespace Capstone.Classes.BusinessLogic
         public string BuyItem(string slot)
         {
             Item item = Inventory[slot];
-            
+
 
             CustomerBalance -= item.Price;
             VendingMachineBalance += item.Price;
@@ -92,21 +94,26 @@ namespace Capstone.Classes.BusinessLogic
             return item.Message;
         }
 
-        public Dictionary<string,int> GiveChange()
+        public Dictionary<string, int> GiveChange()
         {
             Dictionary<string, int> coinCounts = new Dictionary<string, int>();
+            // Change currency formatting to display negative sign rather than parenthesis 
+            CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+            CultureInfo newCulture = new CultureInfo(currentCulture.Name);
+            newCulture.NumberFormat.CurrencyNegativePattern = 1;
+            Thread.CurrentThread.CurrentCulture = newCulture;
             coinCounts["Quarters"] = 0;
             coinCounts["Dimes"] = 0;
             coinCounts["Nickles"] = 0;
             decimal change = CustomerBalance;
-            while(CustomerBalance > 0)
+            while (CustomerBalance > 0)
             {
-                if(CustomerBalance >= .25M)
+                if (CustomerBalance >= .25M)
                 {
                     CustomerBalance -= .25M;
                     coinCounts["Quarters"]++;
                 }
-                else if(CustomerBalance >= .10M)
+                else if (CustomerBalance >= .10M)
                 {
                     CustomerBalance -= .10M;
                     coinCounts["Dimes"]++;
@@ -115,9 +122,9 @@ namespace Capstone.Classes.BusinessLogic
                 {
                     CustomerBalance -= .05M;
                     coinCounts["Nickles"]++;
-                }                
+                }
             }
-            auditLog.Add(new Log("GIVE CHANGE", CustomerBalance, change));
+            auditLog.Add(new Log("GIVE CHANGE", CustomerBalance, -1 * change));
             return coinCounts;
         }
     }

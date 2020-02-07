@@ -79,5 +79,22 @@ namespace Capstone.Classes.IO
 
             return newItem;
         }
+
+        public static void WriteToFile(string fileName, string fileContent, bool append)
+        {
+            try
+            {
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                using (StreamWriter sw = new StreamWriter(fileName, append))
+                {
+                    sw.Write(fileContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
     }
 }

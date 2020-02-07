@@ -31,15 +31,15 @@ namespace Capstone.Classes.IO
         public void PickOption()
         {
             string response = Console.ReadLine().Trim().ToUpper();
-            if(response == "1")
+            if (response == "1")
             {
                 ShowAudit();
             }
-            else if(response == "2")
+            else if (response == "2")
             {
                 ShowSalesReport();
             }
-            else if(response == "3")
+            else if (response == "3")
             {
                 returnToCustomerMenu = true;
                 ExitMenu();
@@ -59,12 +59,16 @@ namespace Capstone.Classes.IO
         public void ShowAudit()
         {
             Console.Clear();
-            foreach(Log line in vendingMachine.auditLog)
+            string fileName = "Log.txt";
+            string fileContent = "";
+            foreach (Log line in vendingMachine.auditLog)
             {
                 Console.WriteLine(line);
+                fileContent += line + "\n";
             }
+            FileIO.WriteToFile(fileName, fileContent, true);
             Console.WriteLine("Press any button to continue");
-            Console.ReadKey();            
+            Console.ReadKey();
         }
 
         public void ShowSalesReport()
@@ -72,12 +76,17 @@ namespace Capstone.Classes.IO
             Console.Clear();
             decimal totalSales = vendingMachine.VendingMachineBalance;
             Dictionary<string, int> itemsSold = vendingMachine.ItemsSold;
-
-            foreach(string itemName in itemsSold.Keys)
+            string fileContent = "";
+            foreach (string itemName in itemsSold.Keys)
             {
-                Console.WriteLine($"{itemName} | {itemsSold[itemName]}");
+                string line = $"{itemName} | {itemsSold[itemName]}";
+                Console.WriteLine(line);
+                fileContent += line + "\n";
             }
-            Console.WriteLine($"\n**TOTAL SALES** {totalSales.ToString("C")}");
+            string sales = $"\n**TOTAL SALES** {totalSales.ToString("C")}";
+            fileContent += sales;
+            FileIO.WriteToFile("SalesReport.txt", fileContent, false);
+            Console.WriteLine(sales);
             Console.WriteLine("Press any button to continue");
             Console.ReadKey();
         }

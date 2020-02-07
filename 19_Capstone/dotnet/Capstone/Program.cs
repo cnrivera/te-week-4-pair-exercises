@@ -16,7 +16,7 @@ namespace Capstone
             lines = FileIO.ReadVendingMachineFile();
             vendingMachine = FileIO.CreateVendingMachine(lines);
             IMenu menu = PickMenu(vendingMachine);
-            RunMenu(menu,vendingMachine);            
+            RunMenu(menu, vendingMachine);
         }
         static IMenu PickMenu(VendingMachine vendingMachine)
         {
@@ -26,7 +26,7 @@ namespace Capstone
 
             Console.WriteLine("Welcome to Vendo-Matic 600. Press enter to continue.");
             response = Console.ReadLine();
-            if(response == ownerPin)
+            if (response == ownerPin)
             {
                 menu = new OwnerMenu(vendingMachine);
             }
@@ -62,6 +62,6 @@ namespace Capstone
             }
         }
 
-        
+
     }
 }

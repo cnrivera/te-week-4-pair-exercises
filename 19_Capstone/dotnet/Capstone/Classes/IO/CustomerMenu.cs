@@ -57,6 +57,19 @@ namespace Capstone.Classes.IO
             }
         }
 
+        public void PickOption(string response)
+        {
+            if (response == "1")
+            {
+                Console.Clear();
+                AddFunds();
+            }
+            else if (response == "2")
+            {
+                EndTransaction();
+            }
+        }
+
         public void ShowOptions()
         {
             Console.Clear();
@@ -73,7 +86,8 @@ namespace Capstone.Classes.IO
         {
             List<string> items = new List<string>(vendingMachine.GetInventory());
             string response;
-            if (vendingMachine.CustomerBalance > 0)
+            string[] menuOptions = { "1", "2", "3" };
+            if (vendingMachine.CustomerBalance >= 0)
             {
                 do
                 {
@@ -84,7 +98,8 @@ namespace Capstone.Classes.IO
                         Console.WriteLine(item);
                     }
 
-                    Console.WriteLine("\nEnter the item number you would like to purchase, or 1 to return to the main menu");
+                    Console.WriteLine("\nEnter the item number you would like to purchase, or enter any of the following options:");
+                    Console.WriteLine("1) Add Funds, 2) End Transaction 3) Return to Main Menu");
                     response = Console.ReadLine().Trim().ToUpper();
                     if (vendingMachine.Slots.Contains(response))
                     {
@@ -96,20 +111,25 @@ namespace Capstone.Classes.IO
                             }
                             items = new List<string>(vendingMachine.GetInventory());
                         }
-                        else
+                        else 
                         {
                             Console.WriteLine("Sorry, this item is out of stock. Press any button to continue");
                             Console.ReadKey();
                         }
                     }
+                    //else if (response != "1")
+                    //{
+                    //    Console.WriteLine("Invalid item selected, please try again or enter 1 to return to the main menu.");
+                    //    Console.ReadKey();
+                    //}
                 }
-                while (response != "1");
-                
+                while (!menuOptions.Contains(response));
+                if(response != "3")
+                {
+                    PickOption(response);
+                }
             }
-            else
-            {
-                Console.WriteLine("Please deposit money before choosing an item");
-            }            
+                
         }
 
         public void AddFunds()
