@@ -105,10 +105,7 @@ namespace Capstone.Classes.IO
                     {
                         if (vendingMachine.IsInStock(response))
                         {
-                            if (PurchaseItem(response))
-                            {
-                                response = "1";
-                            }
+                            PurchaseItem(response);                                                                                        
                             items = new List<string>(vendingMachine.GetInventory());
                         }
                         else 
@@ -181,7 +178,6 @@ namespace Capstone.Classes.IO
         {
             string message;
             bool returnToMainMenu = false;
-            int response;
             if(vendingMachine.CustomerBalance >= vendingMachine.GetItemPrice(slot))
             {
                 message = vendingMachine.BuyItem(slot);
@@ -191,20 +187,22 @@ namespace Capstone.Classes.IO
             {
                 Console.WriteLine("Insufficent funds.");
             }
-            Console.WriteLine("Press any button to continue or 1 to return to the main menu.");
-            response = Console.Read();
-            if (response == 49)
-            {
-                returnToMainMenu = true;
-            }
-            Console.Clear();
+            //Console.WriteLine("Press any button to continue or 1 to return to the main menu.");
+            Console.WriteLine("Press any button to continue");
+            Console.ReadKey();
+            //response = Console.Read();
+            //if (response == 49)
+            //{
+            //    returnToMainMenu = true;
+            //}
+            //Console.Clear();
             return returnToMainMenu;
         }
 
         public void EndTransaction()
         {
-            Dictionary<string, int> cointCount = vendingMachine.GiveChange();
-            Console.WriteLine($"Your change is {cointCount["Quarters"]} quarters, {cointCount["Dimes"]} dimes and {cointCount["Nickles"]} nickles");
+            Dictionary<string, int> coinCount = vendingMachine.GiveChange();
+            Console.WriteLine($"Your change is {coinCount["Quarters"]} quarters, {coinCount["Dimes"]} dimes and {coinCount["Nickles"]} nickles");
             Console.WriteLine("Press any button to continue");
             Console.ReadKey();
         }

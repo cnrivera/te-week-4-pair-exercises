@@ -110,7 +110,7 @@ namespace Capstone.Classes.BusinessLogic
                 slot = slot.ToUpper();
                 if (Inventory.ContainsKey(slot))
                 {
-                    Item item = Inventory[slot.ToUpper()];
+                    Item item = Inventory[slot];
                     if (item.AvailableCount > 0)
                     {
                         CustomerBalance -= item.Price;
@@ -118,7 +118,10 @@ namespace Capstone.Classes.BusinessLogic
                         item.Purchase();
                         if (inTestMode)
                         {
-                            item.AddPreviouslySoldCount(-1);
+                            item.AddPreviouslySoldCount(-1);                            
+                        }
+                        else
+                        {
                             UpdateSalesReport();
                         }
                         //auditLog.Add(new Log(Inventory[slot].Name, CustomerBalance, Inventory[slot].Price));
