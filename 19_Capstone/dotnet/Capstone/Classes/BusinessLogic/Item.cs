@@ -17,5 +17,10 @@ namespace Capstone.Classes.BusinessLogic
             AvailableCount--;
             NumberSold++;
         }
+
+        public void AddPreviouslySoldCount(int count)
+        {
+            NumberSold += count;
+        }
     }
 }

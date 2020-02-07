@@ -15,6 +15,7 @@ namespace Capstone
             List<string> lines = new List<string>();
             lines = FileIO.ReadVendingMachineFile();
             vendingMachine = FileIO.CreateVendingMachine(lines);
+            FileIO.GetPreviousSales(vendingMachine);
             IMenu menu = PickMenu(vendingMachine);
             RunMenu(menu, vendingMachine);
         }

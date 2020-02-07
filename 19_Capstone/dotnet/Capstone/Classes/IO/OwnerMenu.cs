@@ -33,7 +33,8 @@ namespace Capstone.Classes.IO
             string response = Console.ReadLine().Trim().ToUpper();
             if (response == "1")
             {
-                ShowAudit();
+                //ShowAudit();
+                ShowEntireAuditLog();
             }
             else if (response == "2")
             {
@@ -59,14 +60,26 @@ namespace Capstone.Classes.IO
         public void ShowAudit()
         {
             Console.Clear();
-            string fileName = "Log.txt";
+            //string fileName = "Log.txt";
             string fileContent = "";
             foreach (Log line in vendingMachine.auditLog)
             {
                 Console.WriteLine(line);
                 fileContent += line + "\n";
             }
-            FileIO.WriteToFile(fileName, fileContent, true);
+            //FileIO.WriteToFile(fileName, fileContent, true);
+            Console.WriteLine("Press any button to continue");
+            Console.ReadKey();
+        }
+
+        public void ShowEntireAuditLog()
+        {
+            Console.Clear();
+            List<string> auditLogLines = FileIO.GetAuditLog();
+            foreach(string line in auditLogLines)
+            {
+                Console.WriteLine(line);
+            }
             Console.WriteLine("Press any button to continue");
             Console.ReadKey();
         }
@@ -76,16 +89,12 @@ namespace Capstone.Classes.IO
             Console.Clear();
             decimal totalSales = vendingMachine.VendingMachineBalance;
             Dictionary<string, int> itemsSold = vendingMachine.ItemsSold;
-            string fileContent = "";
             foreach (string itemName in itemsSold.Keys)
             {
                 string line = $"{itemName} | {itemsSold[itemName]}";
                 Console.WriteLine(line);
-                fileContent += line + "\n";
             }
             string sales = $"\n**TOTAL SALES** {totalSales.ToString("C")}";
-            fileContent += sales;
-            FileIO.WriteToFile("SalesReport.txt", fileContent, false);
             Console.WriteLine(sales);
             Console.WriteLine("Press any button to continue");
             Console.ReadKey();
